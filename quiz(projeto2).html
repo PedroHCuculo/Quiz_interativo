@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steven Universe Quiz</title>
+    
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Estilos Gerais e Animações --- */
+        :root {
+            --yellow-diamond: #fdfd96;
+            --blue-diamond: cyan;
+            --pink-diamond: #ffc0cb;
+            --white-diamond: white;
+            --bg-color: #0c0c1e;
+            --container-bg: #1a1a2e;
+            --text-color: #eee;
+            --correct-color: #4caf50;
+            --incorrect-color: #f44336;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            background-color: var(--container-bg);
+            padding: 20px 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1, h2 {
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        /* --- Barra de Progresso --- */
+        .progress-container {
+            width: 100%;
+            background-color: #333;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .progress-bar {
+            width: 0%;
+            height: 10px;
+            background: linear-gradient(90deg, var(--pink-diamond), var(--blue-diamond));
+            border-radius: 10px;
+            transition: width 0.4s ease-in-out;
+        }
+        .progress-text {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #aaa;
+        }
+
+        /* --- Botões de Resposta --- */
+        .answer-button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+            text-decoration: none;
+        }
+        
+        .answer-button:hover:not(:disabled) {
+            transform: scale(1.03);
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        .answer-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .answer-button.yellow { background-color: var(--yellow-diamond); color: #333; }
+        .answer-button.blue { background-color: var(--blue-diamond); color: #005757; }
+        .answer-button.pink { background-color: var(--pink-diamond); color: #555; }
+        .answer-button.white { background-color: var(--white-diamond); color: #555; }
+        
+        /* --- Feedback de Resposta --- */
+        .feedback {
+            margin-top: 15px;
+            font-weight: 600;
+            height: 25px; /* Reserva espaço para evitar layout shift */
+            transition: opacity 0.3s ease-in-out;
+        }
+        .feedback.correct { color: var(--correct-color); }
+        .feedback.incorrect { color: var(--incorrect-color); }
+        
+        /* --- Lógica de Navegação (seções) --- */
+        .quiz-section {
+            display: none;
+        }
+        .quiz-section:target {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        body:not(:has(:target)) #start {
+            display: block;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Tela inicial -->
+        <section id="start" class="quiz-section">
+            <h1>O quão fã de Steven Universo você é?</h1>
+            <img src="steven.images/su.png" alt="Steven Universe">
+            <a href="#q1" class="answer-button yellow">Começar</a>
+        </section>
+
+        <!-- Pergunta 1 -->
+        <section id="q1" class="quiz-section">
+            <div class="progress-container"><div class="progress-bar"></div></div>
+            <p class="progress-text">Questão 1 de 10</p>
+            <h2>Quem é o protagonista?</h2>
+            <img src="steven.images/su.png" alt="Steven Universe">
+            <button class="answer-button yellow" data-correct="true">Steven</button>
+            <button class="answer-button blue">Ametista</button>
+            <button class="answer-button pink">Pérola</button>
+            <button class="answer-button white">Garnet</button>
+            <div class="feedback"></div>
+        </section>
+
+        <!-- Pergunta 2 -->
+        <section id="q2" class="quiz-section">
+            <div class="progress-container"><div class="progress-bar"></div></div>
+            <p class="progress-text">Questão 2 de 10</p>
+            <h2>Quantos episódios tem a primeira temporada?</h2>
+            <img src="steven.images/season1.jpg" alt="Temporada 1">
+            <button class="answer-button yellow">38 episódios</button>
+            <button class="answer-button blue">26 episódios</button>
+            <button class="answer-button pink" data-correct="true">52 episódios</button>
+            <button class="answer-button white">20 episódios</button>
+            <div class="feedback"></div>
+        </section>
+
+        <!-- Pergunta 3 -->
+        <section id="q3" class="quiz-section">
+            <div class="progress-container"><div class="progress-bar"></div></div>
+            <p class="progress-text">Questão 3 de 10</p>
+            <h2>Por que Lápis-lazuli mandou uma mensagem para as Crystal Gems?</h2>
+            <img src="steven.images/lapis_lazuli.jpg" alt="Lápis-lazuli">
+            <button class="answer-button yellow" data-correct="true">Para avisar sobre a chegada de Peridot até à terra</button>
+            <button class="answer-button blue">Para avisar sobre o estilhaçamento da Diamante Rosa</button>
+            <button class="answer-button pink">Para avisar sobre o fim da Era 1</button>
+            <button class="answer-button white">Para avisar que a Drusa iria emergir em breve</button>
+            <div class="feedback"></div>
+        </section>
+
+        <!-- Pergunta 4 -->
+        <section id="q4" class="quiz-section">
+            <div class="progress-container"><div class="progress-bar"></div></div>
+            <p class="progress-text">Questão 4 de 10</p>
+            <h2>Em qual temporada tivemos a primeira aparição da Diamante Amarelo?</h2>
+            <button class="answer-button yellow">Primeira</button>
+            <button class="answer-button blue" data-correct="true">Segunda</button>
+            <button class="answer-button pink">Terçeira</button>
+            <button class="answer-button white">Quarta</button>
+            <div class="feedback"></div>
+        </section>
+
+        <!-- Pergunta 5 -->
+        <section id="q5" class="quiz-section">
+            <div class="progress-container"><div class="progress-bar"></div></div>
+            <p class="progress-text">Questão 5 de 10</p>
+            <h2>Quem era a gem mais traumatizada da série?</h2>
+            <button class="answer-button yellow">Peridot</button>
+            <button class="answer-button blue" data-correct="true">Lápis-lazuli</button>
+            <button class="answer-button pink">Aquamarine</button>
+            <button class="answer-button white">Jasper</button>
+            <div class="feedback"></div>
+        </section>
+
+        <!-- Pergunta 6 -->
+        <section id="q6" class="quiz-section">
+            <div class="progress-container"><div class="progress-bar"></div></div>
+            <p class="progress-text">Questão 6 de 10</p>
+            <h2>Qual diamante Garnet mais tinha medo?</h2>
+            <img src="steven.images/diamonds.jpg" alt="Diamantes">
+            <button class="answer-button yellow">Rosa</button>
+            <button class="answer-button blue">Amarelo</button>
+            <button class="answer-button pink" data-correct="true">Azul</button>
+            <button class="answer-button white">Branco</button>
+            <div class="feedback"></div>
+        </section>
+
+        <!-- Pergunta 7 -->
+        <section id="q7" class="quiz-section">
+            <div class="progress-container"><div class="progress-bar"></div></div>
+            <p class="progress-text">Questão 7 de 10</p>
+            <h2>Qual episódio Lápis conta sobre seu passado?</h2>
+            <button class="answer-button yellow">Gem oceano</button>
+            <button class="answer-button blue">Sozinhos no mar</button>
+            <button class="answer-button pink">Colegas de celeiro</button>
+            <button class="answer-button white" data-correct="true">O mesmo mundo</button>
+            <div class="feedback"></div>
+        </section>
+
+        <!-- Pergunta 8 -->
+        <section id="q8" class="quiz-section">
+            <div class="progress-container"><div class="progress-bar"></div></div>
+            <p class="progress-text">Questão 8 de 10</p>
+            <h2>Por que Steven não perdoou as diamantes?</h2>
+            <img src="steven.images/steven_face.webp" alt="Steven raivoso">
+            <button class="answer-button yellow" data-correct="true">Por que elas são as responsáveis pela destruição de vários planetas do universo</button>
+            <button class="answer-button blue">Por que elas prenderam Lápis no espelho</button>
+            <button class="answer-button pink">Por que elas comrromperam as gems esquecidas na terra</button>
+            <button class="answer-button white">Por que elas poofaram suas amigas</button>
+            <div class="feedback"></div>
+        </section>
+
+        <!-- Pergunta 9 -->
+        <section id="q9" class="quiz-section">
+            <div class="progress-container"><div class="progress-bar"></div></div>
+            <p class="progress-text">Questão 9 de 10</p>
+            <h2>Diamante Rosa era uma vilã ou não?</h2>
+            <img src="steven.images/pink_diamond.jpg" alt="Diamante Rosa">
+            <button class="answer-button yellow">Sim, taquem pedra nela!</button>
+            <button class="answer-button blue">Não, ela salvou a Terra</button>
+            <button class="answer-button pink">Ela está morta, não dá pra saber</button>
+            <button class="answer-button white" data-correct="true">Neutra, julge e defenda ela quando quiser</button>
+            <div class="feedback"></div>
+        </section>
+
+        <!-- Pergunta 10 -->
+        <section id="q10" class="quiz-section">
+            <div class="progress-container"><div class="progress-bar"></div></div>
+            <p class="progress-text">Questão 10 de 10</p>
+            <h2>Que dia Steven faz aniversário?</h2>
+            <button class="answer-button yellow">12 de setembro</button>
+            <button class="answer-button blue">23 de julho</button>
+            <button class="answer-button pink" data-correct="true">15 de agosto</button>
+            <button class="answer-button white">3 de outubro</button>
+            <div class="feedback"></div>
+        </section>
+
+        <!-- Tela final -->
+        <section id="end" class="quiz-section">
+            <h2>Fim do Quiz 🎉</h2>
+            <img src="steven.images/Bob.webp" alt="Bob" width="200">
+            <p>Espero que tenha gostado, continue assistindo o desenho eu recomendo!</p>
+            <a href="#start" class="answer-button blue">Recomeçar</a>
+        </section>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('.quiz-section');
+            const totalQuestions = 10;
+
+            // Função para atualizar a barra de progresso
+            const updateProgress = (currentQuestion) => {
+                const progressBar = document.querySelector('.quiz-section:target .progress-bar');
+                const progressText = document.querySelector('.quiz-section:target .progress-text');
+                if (progressBar) {
+                    const progress = (currentQuestion / totalQuestions) * 100;
+                    progressBar.style.width = `${progress}%`;
+                }
+                if (progressText) {
+                    progressText.textContent = `Questão ${currentQuestion} de ${totalQuestions}`;
+                }
+            };
+
+            // Lógica para verificar respostas
+            sections.forEach(section => {
+                // CORREÇÃO: Aplicar a lógica APENAS às seções de pergunta (id começa com 'q')
+                if (!section.id.startsWith('q')) {
+                    return; // Ignora as seções #start e #end
+                }
+
+                const buttons = section.querySelectorAll('.answer-button');
+                const feedbackDiv = section.querySelector('.feedback');
+
+                if (!buttons.length) return; // Pula se não houver botões
+
+                buttons.forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        // Impede o comportamento padrão do botão
+                        event.preventDefault();
+
+                        // Desabilita todos os botões da seção atual
+                        buttons.forEach(btn => btn.disabled = true);
+
+                        const isCorrect = button.dataset.correct === 'true';
+                        const nextSectionId = section.nextElementSibling.id;
+
+                        if (isCorrect) {
+                            feedbackDiv.textContent = 'Correto! ✅';
+                            feedbackDiv.className = 'feedback correct';
+                        } else {
+                            feedbackDiv.textContent = 'Errado! ❌';
+                            feedbackDiv.className = 'feedback incorrect';
+                            // Destaca a resposta correta
+                            const correctButton = section.querySelector('[data-correct="true"]');
+                            if(correctButton) {
+                                correctButton.style.border = '3px solid #4caf50';
+                                correctButton.style.transform = 'scale(1.05)';
+                            }
+                        }
+
+                        // Avança para a próxima pergunta após um tempo
+                        setTimeout(() => {
+                            window.location.href = `#${nextSectionId}`;
+                        }, 1500); // 1.5 segundos
+                    });
+                });
+            });
+
+            // Atualiza o progresso quando a seção muda
+            window.addEventListener('hashchange', () => {
+                const currentHash = window.location.hash.substring(1);
+                const questionNumber = parseInt(currentHash.replace('q', ''));
+                if (!isNaN(questionNumber)) {
+                    updateProgress(questionNumber);
+                }
+            });
+
+            // Define o progresso inicial na primeira carga
+            const initialHash = window.location.hash.substring(1);
+            if (initialHash === 'start' || initialHash === '') {
+                 // Não mostra a barra na tela inicial
+            } else {
+                 const questionNumber = parseInt(initialHash.replace('q', ''));
+                 if (!isNaN(questionNumber)) {
+                     updateProgress(questionNumber);
+                 }
+            }
+        });
+    </script>
+</body>
+</html>
